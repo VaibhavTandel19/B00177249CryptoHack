@@ -1,0 +1,1431 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sl240\slmult1\b\f0\fs32\lang9\par
+Secure Comms & Cryptography\par
+B00177249 Vaibhav Tandel \par
+CryptoHack Lab Assignment(2470points)\par
+\par
+\par
+\par
+1XOR properties\b0\fs22\par
+\par
+#This is Crypto hack lab XOR properties Lab \par
+#We used XOR properties like  which is mentioned in the exercies \par
+#the first step was to find all the keys and their hex value as we wanted to find we need individual keys \par
+# so we can use xor to get original flag in its bytes form as it was mentioned.\par
+\par
+key1 = "a6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313"\par
+key1_bytes = bytes.fromhex(key1)\par
+key12 = "37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e"\par
+key12_bytes = bytes.fromhex(key12)\par
+#for i in key1_bytes:\par
+    #for j in key12_bytes:\par
+#key2 = hex(int(key1, 16) ^ int(key12, 16))\par
+key23 = "c1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1"\par
+key2 = "0x911404e13f94884eabbec925851240a52fa381ddb79700dd6d0d"\par
+key3 = hex(int(key2, 16) ^ int(key23, 16))\par
+#print(key3)\par
+key3 = "0x504053b757eafd3d709d6339b140e03d98b9fe62b84add0332cc"\par
+keyflag123 = "04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf"\par
+#flag = hex(int(key1, 16) ^ int(key2, 16) ^ int(key3, 16) )\par
+flag = "0x679ce12554e557ada0e38f2e52f126e54240b2576c83c4196cd2"\par
+#mainflag= hex(int(key1, 16) ^ int(key2, 16) ^ int(key3, 16) ^ int(keyflag123, 16) )\par
+mainflag = "0x63727970746f7b7830725f69355f61737330633161743176337d"\par
+print(bytes.fromhex(str(mainflag)[2:]))\par
+\par
+\b\fs28 Output :- b'crypto\{x0r_i5_ass0c1at1v3\}'\b0\fs22\par
+\par
+\par
+\b\fs32 2 Favorite byte\fs28\par
+\par
+\b0\fs22 #This is crypto hack Favourite byte lab \par
+# in this lab we are trying to decode the hex srting provided in the question\par
+# We are doing XOR of string with every byte from 0 to 255 \par
+# then we specify in line 13 that if the key is started with word crypto then print or try another byte\par
+\par
+import binascii\par
+str = "73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d"\par
+encoded = binascii.unhexlify(str)\par
+for xorkey in range(256):\par
+    decoded = ''.join(chr(b^xorkey) for b in encoded)\par
+    if decoded.startswith("crypto"):\par
+        print (xorkey, decoded)\par
+\par
+\b\fs28 Output :- 16 crypto\{0x10_15_my_f4v0ur173_by7e\}\b0\fs22\par
+\par
+\par
+\b\fs32 3XOR you don't\b0\fs24\par
+\fs22\par
+# This is cryptohack (You either know, XOR you don't) lab\par
+#In this lab we used our encrypted string and XOR it with crypto\{ as this is mandatory in every answer \par
+# so we got yXORkey as a new key and again we did the XOR with the existing string \par
+\par
+def xor_bytes(data, key):\par
+    return bytes([b ^ key[i % len(key)] for i, b in enumerate(data)])\par
+flag = bytes.fromhex('0e0b213f26041e480b26217f27342e175d0e070a3c5b103e2526217f27342e175d0e077e263451150104')\par
+key1 = 'myXORkey'.encode()\par
+print(xor_bytes(flag, key1))\par
+\par
+\b\fs28 Output :-  b'crypto\{1f_y0u_Kn0w_En0uGH_y0u_Kn0w_1t_4ll\}'\b0\fs22\par
+\par
+\par
+\b\fs32 4 GCD\b0\fs24\par
+\fs22\par
+#This is cryptohack GCD lab\par
+# In this lab we used Euclidean algorithm\par
+# example of Euclidean algorithm if 30/12 =2 and remainder is 6 and 12/ 6 = 2 then gcd is 6#\par
+\par
+def gcd(a, b):\par
+    while b:\par
+        a, b = b, a % b  #Euclidean algorithm\par
+    return a\par
+a = 66528\par
+b = 52920\par
+print(gcd(a, b))\par
+\par
+\b\fs28 Output :-  1512\b0\fs22\par
+\par
+\par
+\b\fs32 5 Extended GCD\b0\fs24\par
+\fs22\par
+#This is cryptohack Extended GCD lab\par
+## In this lab we used Euclidean algorithm again\par
+# In this code we added  [gcd_val, x1, y1 = extendedgcd(q % p, p)] line so we can find coeffiecient \par
+\par
+def gcd(a, b):\par
+    if a == 0:\par
+        return b\par
+    elif b == 0:\par
+        return a\par
+    return gcd(b, a % b)\par
+def extendedgcd(p, q):\par
+    if p == 0:\par
+        return q, 0, 1\par
+    gcd_val, x1, y1 = extendedgcd(q % p, p)     \par
+    x = y1 - (q // p) * x1  \par
+    y = x1\par
+    return gcd_val, x, y\par
+gcd_val, x, y = extendedgcd(26513, 32321)\par
+print("GCD=", gcd_val)\par
+print("x=", x)\par
+print("y=", y)\par
+\par
+\par
+\b\fs28 Output :-  GCD= 1, x= 10245, y= -8404\b0\fs22\par
+\par
+\b\fs32 6ModularArithmetic1\b0\fs24\par
+\fs22\par
+\par
+#This is cryptohack Modular arithmetic 1 lab\par
+# in this we checked if imod 17 and  146798528947  mod 17 gives equal value then their answer is also same which is 4\par
+\par
+for i in range(10):  \par
+    if i % 17 == 8146798528947 % 17:\par
+        print(i)  \par
+\par
+\b\fs28 Output :-  4\par
+\par
+\b0\fs22\par
+\b\fs32 7 ModularArithmetic2\b0\fs24\par
+\fs22\par
+\par
+# #This is cryptohack Modular arithmetic 2 lab\par
+# We used Fermat's Little Theorem which is A^P-1 mod P is always 1 if P is prime number and A is not divisible by P\par
+\par
+A = 273246787654\par
+P = 65537\par
+def main() -> None:\par
+    result = pow(A, P - 1, P)\par
+    print(result)\par
+if __name__ == "__main__":\par
+    main()\par
+ \par
+\b\fs28 Output :- 1\b0\fs22\par
+\par
+\par
+\b\fs32 8 Modular Inverting\b0\fs24\par
+\fs22\par
+\par
+# #This is cryptohack Modular Inverting lab\par
+# We used Fermat's Little Theorem which is A^P-1 mod P is always 1 if P is prime number and A is not divisible by P\par
+# 3^13-1  (mod13)\par
+p = 29\par
+ints = [14,6,11]\par
+print ((i,j) for i in ints for j in range(29) if (j**2)%29 == i)\par
+\par
+\b\fs28 Output :-  9 \par
+\par
+\b0\fs22\par
+\b\fs32 9 Quadratic Residues   \par
+\b0\fs22\par
+\par
+\par
+# #This is cryptohack Quadratic residues lab\par
+#we are finding perfect squares modulo p  if i^(p-1)/2 mod p = 1\par
+\par
+\par
+p = 101524035174539890485408575671085261788758965189060164484385690801466167356667036677932998889725476582421738788500738738503134356158197247473850273565349249573867251280253564698939768700489401960767007716413932851838937641880157263936985954881657889497583485535527613578457628399173971810541670838543309159139\par
+ints = [25081841204695904475894082974192007718642931811040324543182130088804239047149283334700530600468528298920930150221871666297194395061462592781551275161695411167049544771049769000895119729307495913024360169904315078028798025169985966732789207320203861858234048872508633514498384390497048416012928086480326832803, 45471765180330439060504647480621449634904192839383897212809808339619841633826534856109999027962620381874878086991125854247108359699799913776917227058286090426484548349388138935504299609200377899052716663351188664096302672712078508601311725863678223874157861163196340391008634419348573975841578359355931590555, 17364140182001694956465593533200623738590196990236340894554145562517924989208719245429557645254953527658049246737589538280332010533027062477684237933221198639948938784244510469138826808187365678322547992099715229218615475923754896960363138890331502811292427146595752813297603265829581292183917027983351121325, 14388109104985808487337749876058284426747816961971581447380608277949200244660381570568531129775053684256071819837294436069133592772543582735985855506250660938574234958754211349215293281645205354069970790155237033436065434572020652955666855773232074749487007626050323967496732359278657193580493324467258802863, 4379499308310772821004090447650785095356643590411706358119239166662089428685562719233435615196994728767593223519226235062647670077854687031681041462632566890129595506430188602238753450337691441293042716909901692570971955078924699306873191983953501093343423248482960643055943413031768521782634679536276233318, 85256449776780591202928235662805033201684571648990042997557084658000067050672130152734911919581661523957075992761662315262685030115255938352540032297113615687815976039390537716707854569980516690246592112936796917504034711418465442893323439490171095447109457355598873230115172636184525449905022174536414781771, 50576597458517451578431293746926099486388286246142012476814190030935689430726042810458344828563913001012415702876199708216875020997112089693759638454900092580746638631062117961876611545851157613835724635005253792316142379239047654392970415343694657580353333217547079551304961116837545648785312490665576832987, 96868738830341112368094632337476840272563704408573054404213766500407517251810212494515862176356916912627172280446141202661640191237336568731069327906100896178776245311689857997012187599140875912026589672629935267844696976980890380730867520071059572350667913710344648377601017758188404474812654737363275994871, 4881261656846638800623549662943393234361061827128610120046315649707078244180313661063004390750821317096754282796876479695558644108492317407662131441224257537276274962372021273583478509416358764706098471849536036184924640593888902859441388472856822541452041181244337124767666161645827145408781917658423571721, 18237936726367556664171427575475596460727369368246286138804284742124256700367133250078608537129877968287885457417957868580553371999414227484737603688992620953200143688061024092623556471053006464123205133894607923801371986027458274343737860395496260538663183193877539815179246700525865152165600985105257601565]\par
+result = [pow(residue, (p+1) >> 2, p) for residue in [i for i in ints if (pow(i, (p-1) >> 1, p)) == 1]]\par
+print(result)\par
+\par
+\par
+\b\fs28 Output :-  93291799125366706806545638475797430512104976066103610269938025709952247020061090804870186195285998727680200979853848718589126765742550855954805290253592144209552123062161458584575060939481368210688629862036958857604707468372384278049741369153506182660264876115428251983455344219194133033177700490981696141526\b0\fs22\par
+\par
+\par
+\b\fs32 10 Modular Square Root\par
+\b0\fs22\par
+\par
+\par
+#Modular Square Root lab\par
+# According to Tonelli-Shanks algorithm (x^2  = a mod p)  so if we divide both side then x = square root of a mod p#\par
+\tab\par
+a = 8479994658316772151941616510097127087554541274812435112009425778595495359700244470400642403747058566807127814165396640215844192327900454116257979487432016769329970767046735091249898678088061634796559556704959846424131820416048436501387617211770124292793308079214153179977624440438616958575058361193975686620046439877308339989295604537867493683872778843921771307305602776398786978353866231661453376056771972069776398999013769588936194859344941268223184197231368887060609212875507518936172060702209557124430477137421847130682601666968691651447236917018634902407704797328509461854842432015009878011354022108661461024768\par
+p = 30531851861994333252675935111487950694414332763909083514133769861350960895076504687261369815735742549428789138300843082086550059082835141454526618160634109969195486322015775943030060449557090064811940139431735209185996454739163555910726493597222646855506445602953689527405362207926990442391705014604777038685880527537489845359101552442292804398472642356609304810680731556542002301547846635101455995732584071355903010856718680732337369128498655255277003643669031694516851390505923416710601212618443109844041514942401969629158975457079026906304328749039997262960301209158175920051890620947063936347307238412281568760161\par
+print(sqrt_mod(a, p))\par
+\par
+\b\fs28 Output :-  2362339307683048638327773298580489298932137505520500388338271052053734747862351779647314176817953359071871560041125289919247146074907151612762640868199621186559522068338032600991311882224016021222672243139362180461232646732465848840425458257930887856583379600967761738596782877851318489355679822813155123045705285112099448146426755110160002515592418850432103641815811071548456284263507805589445073657565381850521367969675699760755310784623577076440037747681760302434924932113640061738777601194622244192758024180853916244427254065441962557282572849162772740798989647948645207349737457445440405057156897508368531939120\b0\fs22\par
+\par
+\b\fs32 11 Chinese Remainder Theorem\par
+\b0\fs22\par
+\par
+#we are already given that successive power of x modulo a three-digit prime p\par
+# we will take different value of p  for x1 mod p = 588,665... \par
+# check for the value in which we get x value constant \par
+\par
+\par
+\par
+from Crypto.Util.number import inverse\par
+import gmpy2\par
+t = [588, 665, 216, 113, 642, 4, 836, 114, 851, 492, 819, 237]\par
+pval = max(t) + 1  \par
+for p in range(pval, 1000000):  \par
+    try:\par
+        x = [(t[i] * inverse(t[i-1], p)) % p for i in range(1, len(t))]\par
+        if len(set(x)) == 1:\par
+            print("Found p:", p)\par
+            print("x:", x)\par
+            break  \par
+    except Exception as e:\par
+        print(f"Error for p=\{p\}: \{e\}")\par
+        pass\par
+\par
+\par
+\b\fs28 Output :-   872\b0\fs22\par
+\par
+\par
+\b\fs32 12 Adrien's Signs\par
+\b0\fs22\par
+\par
+# Adrien's Signs lab\par
+#As mention in the source.py code [plaintext = ''.join([bin(i)[2:].zfill(8) for i in flag])]  \par
+# we are splitting binary string in 8bit(1 byte) blocks and then converting it in to character #\par
+\par
+a = 288260533169915\par
+p = 1007621497415251\par
+ciphertext = [667594220461269, 501237540280788, 718316769824518, 296304224247167, 48290626940198, 30829701196032, 521453693392074, 840985324383794, 770420008897119, 745131486581197, 729163531979577, 334563813238599, 289746215495432, 538664937794468, 894085795317163, 983410189487558, 863330928724430, 996272871140947, 352175210511707, 306237700811584, 631393408838583, 589243747914057, 538776819034934, 365364592128161, 454970171810424, 986711310037393, 657756453404881, 388329936724352, 90991447679370, 714742162831112, 62293519842555, 653941126489711, 448552658212336, 970169071154259, 339472870407614, 406225588145372, 205721593331090, 926225022409823, 904451547059845, 789074084078342, 886420071481685, 796827329208633, 433047156347276, 21271315846750, 719248860593631, 534059295222748, 879864647580512, 918055794962142, 635545050939893, 319549343320339, 93008646178282, 926080110625306, 385476640825005, 483740420173050, 866208659796189, 883359067574584, 913405110264883, 898864873510337, 208598541987988, 23412800024088, 911541450703474, 57446699305445, 513296484586451, 180356843554043, 756391301483653, 823695939808936, 452898981558365, 383286682802447, 381394258915860, 385482809649632, 357950424436020, 212891024562585, 906036654538589, 706766032862393, 500658491083279, 134746243085697, 240386541491998, 850341345692155, 826490944132718, 329513332018620, 41046816597282, 396581286424992, 488863267297267, 92023040998362, 529684488438507, 925328511390026, 524897846090435, 413156582909097, 840524616502482, 325719016994120, 402494835113608, 145033960690364, 43932113323388, 683561775499473, 434510534220939, 92584300328516, 763767269974656, 289837041593468, 11468527450938, 628247946152943, 8844724571683, 813851806959975, 72001988637120, 875394575395153, 70667866716476, 75304931994100, 226809172374264, 767059176444181, 45462007920789, 472607315695803, 325973946551448, 64200767729194, 534886246409921, 950408390792175, 492288777130394, 226746605380806, 944479111810431, 776057001143579, 658971626589122, 231918349590349, 699710172246548, 122457405264610, 643115611310737, 999072890586878, 203230862786955, 348112034218733, 240143417330886, 927148962961842, 661569511006072, 190334725550806, 763365444730995, 516228913786395, 846501182194443, 741210200995504, 511935604454925, 687689993302203, 631038090127480, 961606522916414, 138550017953034, 932105540686829, 215285284639233, 772628158955819, 496858298527292, 730971468815108, 896733219370353, 967083685727881, 607660822695530, 650953466617730, 133773994258132, 623283311953090, 436380836970128, 237114930094468, 115451711811481, 674593269112948, 140400921371770, 659335660634071, 536749311958781, 854645598266824, 303305169095255, 91430489108219, 573739385205188, 400604977158702, 728593782212529, 807432219147040, 893541884126828, 183964371201281, 422680633277230, 218817645778789, 313025293025224, 657253930848472, 747562211812373, 83456701182914, 470417289614736, 641146659305859, 468130225316006, 46960547227850, 875638267674897, 662661765336441, 186533085001285, 743250648436106, 451414956181714, 527954145201673, 922589993405001, 242119479617901, 865476357142231, 988987578447349, 430198555146088, 477890180119931, 844464003254807, 503374203275928, 775374254241792, 346653210679737, 789242808338116, 48503976498612, 604300186163323, 475930096252359, 860836853339514, 994513691290102, 591343659366796, 944852018048514, 82396968629164, 152776642436549, 916070996204621, 305574094667054, 981194179562189, 126174175810273, 55636640522694, 44670495393401, 74724541586529, 988608465654705, 870533906709633, 374564052429787, 486493568142979, 469485372072295, 221153171135022, 289713227465073, 952450431038075, 107298466441025, 938262809228861, 253919870663003, 835790485199226, 655456538877798, 595464842927075, 191621819564547 ]\par
+plaintext = ''.join([ '1' if pow(c, (p - 1) // 2, p) == 1 else '0' for c in ciphertext])\par
+print( ''.join( [ chr(int(plaintext[i:i+8], 2)) for i in range(0, len(plaintext), 8)] ) )\par
+\par
+\b\fs28 Output :-  crypto\{p4tterns_1n_re5idu3s\}\b0\fs22\par
+\par
+\par
+\b\fs32 13 Modular Binomials\par
+\b0\fs22\par
+# Modular Binomials lab\par
+#we are finding 2 factors p,q from N\par
+# we are having 2 encrypted messages c1,c2 and its exponents e1,e2  and then we are appling gcd#\par
+import math\par
+\par
+def solve_RSA_challenge(N, e1, e2, c1, c2):\par
+    diff = (pow(c1, e2, N) * pow(5, e1 * e2, N) - pow(c2, e1, N) * pow(2, e1 * e2, N)) % N\par
+    # Computing q using the gcd approach\par
+    q = math.gcd(diff, N)\par
+    p = N // q\par
+    return p, q\par
+with open('data.txt', 'r') as f:\par
+    # Remove 'N = ' from the line and convert the remaining part to an integer\par
+    N = int(f.readline().strip().split('=')[1].strip())\par
+    e1 = int(f.readline().strip().split('=')[1].strip())\par
+    e2 = int(f.readline().strip().split('=')[1].strip())\par
+    c1 = int(f.readline().strip().split('=')[1].strip())\par
+    c2 = int(f.readline().strip().split('=')[1].strip())\par
+\par
+p, q = solve_RSA_challenge(N, e1, e2, c1, c2)\par
+print("p:", p)\par
+print("q:", q)\par
+\par
+\par
+\b\fs28 Output :-  p: 112274000169258486390262064441991200608556376127408952701514962644340921899196091557519382763356534106376906489445103255177593594898966250176773605432765983897105047795619470659157057093771407309168345670541418772427807148039207489900810013783673957984006269120652134007689272484517805398390277308001719431273\par
+q: 132760587806365301971479157072031448380135765794466787456948786731168095877956875295282661565488242190731593282663694728914945967253173047324353981530949360031535707374701705328450856944598803228299967009004598984671293494375599408764139743217465012770376728876547958852025425539298410751132782632817947101601\b0\fs22\par
+\par
+\b\fs32 14 Structure of AES\par
+\b0\fs22\par
+# Structure of AES lab\par
+# first we are converting bytes to matrix and than matrix to bytes then \par
+# we are converting matrix into 2 bytes and then decoding it in string to get answer #\par
+\par
+def bytes2matrix(text):\par
+    return [list(text[i:i+4]) for i in range(0, len(text), 4)]\par
+\par
+def matrix2bytes(matrix):\par
+    out = []\par
+    for r in matrix:\par
+        for c in r:\par
+            out.append(c.to_bytes(2,byteorder='little').decode())\par
+    return ''.join(out)\par
+\par
+matrix = [\par
+    [99, 114, 121, 112],\par
+    [116, 111, 123, 105],\par
+    [110, 109, 97, 116],\par
+    [114, 105, 120, 125],\par
+]\par
+print(matrix2bytes(matrix))\par
+\par
+\b\fs28 Output :-  crypto\{inmatrix\}\b0\fs22\par
+\par
+\par
+\par
+\b\fs32 15 Round Keys\par
+\b0\fs22\par
+# Round Keys lab\par
+#we are having 2 matrices state and round key and we are doing XOR between their elements \par
+# then we are converting it in to bytes to get the answer#\par
+\par
+state = [\par
+    [206, 243, 61, 34],\par
+    [171, 11, 93, 31],\par
+    [16, 200, 91, 108],\par
+    [150, 3, 194, 51],\par
+]\par
+round_key = [\par
+    [173, 129, 68, 82],\par
+    [223, 100, 38, 109],\par
+    [32, 189, 53, 8],\par
+    [253, 48, 187, 78],\par
+]\par
+def add_round_key(s, k):\par
+    out = []\par
+    for i in range(len(s)):\par
+        for j in range(len(s[i])):\par
+            out.append(s[i][j] ^ k[i][j])\par
+    return out\par
+def matrix2bytes(matrix):\par
+    out = []\par
+    for r in matrix:\par
+        out.append(r.to_bytes(2,byteorder='little').decode())\par
+    return ''.join(out)\par
+print(matrix2bytes(add_round_key(state, round_key)))\par
+\par
+\par
+\b\fs28 Output :-  crypto\{r0undk3y\}\b0\fs22\par
+\par
+\par
+\b\fs32 16 Confusion through Substitution\par
+\b0\fs22\par
+# Confusion through Substitution lab\par
+#we are substituting each value in state matrices by different value from inv s box  and they are resulting in bytes form \par
+# then we use bytes to get answer in string#\par
+\par
+\par
+s_box = (\par
+    0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,\par
+    0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,\par
+    0xB7, 0xFD, 0x93, 0x26, 0x36, 0x3F, 0xF7, 0xCC, 0x34, 0xA5, 0xE5, 0xF1, 0x71, 0xD8, 0x31, 0x15,\par
+    0x04, 0xC7, 0x23, 0xC3, 0x18, 0x96, 0x05, 0x9A, 0x07, 0x12, 0x80, 0xE2, 0xEB, 0x27, 0xB2, 0x75,\par
+    0x09, 0x83, 0x2C, 0x1A, 0x1B, 0x6E, 0x5A, 0xA0, 0x52, 0x3B, 0xD6, 0xB3, 0x29, 0xE3, 0x2F, 0x84,\par
+    0x53, 0xD1, 0x00, 0xED, 0x20, 0xFC, 0xB1, 0x5B, 0x6A, 0xCB, 0xBE, 0x39, 0x4A, 0x4C, 0x58, 0xCF,\par
+    0xD0, 0xEF, 0xAA, 0xFB, 0x43, 0x4D, 0x33, 0x85, 0x45, 0xF9, 0x02, 0x7F, 0x50, 0x3C, 0x9F, 0xA8,\par
+    0x51, 0xA3, 0x40, 0x8F, 0x92, 0x9D, 0x38, 0xF5, 0xBC, 0xB6, 0xDA, 0x21, 0x10, 0xFF, 0xF3, 0xD2,\par
+    0xCD, 0x0C, 0x13, 0xEC, 0x5F, 0x97, 0x44, 0x17, 0xC4, 0xA7, 0x7E, 0x3D, 0x64, 0x5D, 0x19, 0x73,\par
+    0x60, 0x81, 0x4F, 0xDC, 0x22, 0x2A, 0x90, 0x88, 0x46, 0xEE, 0xB8, 0x14, 0xDE, 0x5E, 0x0B, 0xDB,\par
+    0xE0, 0x32, 0x3A, 0x0A, 0x49, 0x06, 0x24, 0x5C, 0xC2, 0xD3, 0xAC, 0x62, 0x91, 0x95, 0xE4, 0x79,\par
+    0xE7, 0xC8, 0x37, 0x6D, 0x8D, 0xD5, 0x4E, 0xA9, 0x6C, 0x56, 0xF4, 0xEA, 0x65, 0x7A, 0xAE, 0x08,\par
+    0xBA, 0x78, 0x25, 0x2E, 0x1C, 0xA6, 0xB4, 0xC6, 0xE8, 0xDD, 0x74, 0x1F, 0x4B, 0xBD, 0x8B, 0x8A,\par
+    0x70, 0x3E, 0xB5, 0x66, 0x48, 0x03, 0xF6, 0x0E, 0x61, 0x35, 0x57, 0xB9, 0x86, 0xC1, 0x1D, 0x9E,\par
+    0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,\par
+    0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16,\par
+)\par
+\par
+inv_s_box = (\par
+    0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,\par
+    0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87, 0x34, 0x8E, 0x43, 0x44, 0xC4, 0xDE, 0xE9, 0xCB,\par
+    0x54, 0x7B, 0x94, 0x32, 0xA6, 0xC2, 0x23, 0x3D, 0xEE, 0x4C, 0x95, 0x0B, 0x42, 0xFA, 0xC3, 0x4E,\par
+    0x08, 0x2E, 0xA1, 0x66, 0x28, 0xD9, 0x24, 0xB2, 0x76, 0x5B, 0xA2, 0x49, 0x6D, 0x8B, 0xD1, 0x25,\par
+    0x72, 0xF8, 0xF6, 0x64, 0x86, 0x68, 0x98, 0x16, 0xD4, 0xA4, 0x5C, 0xCC, 0x5D, 0x65, 0xB6, 0x92,\par
+    0x6C, 0x70, 0x48, 0x50, 0xFD, 0xED, 0xB9, 0xDA, 0x5E, 0x15, 0x46, 0x57, 0xA7, 0x8D, 0x9D, 0x84,\par
+    0x90, 0xD8, 0xAB, 0x00, 0x8C, 0xBC, 0xD3, 0x0A, 0xF7, 0xE4, 0x58, 0x05, 0xB8, 0xB3, 0x45, 0x06,\par
+    0xD0, 0x2C, 0x1E, 0x8F, 0xCA, 0x3F, 0x0F, 0x02, 0xC1, 0xAF, 0xBD, 0x03, 0x01, 0x13, 0x8A, 0x6B,\par
+    0x3A, 0x91, 0x11, 0x41, 0x4F, 0x67, 0xDC, 0xEA, 0x97, 0xF2, 0xCF, 0xCE, 0xF0, 0xB4, 0xE6, 0x73,\par
+    0x96, 0xAC, 0x74, 0x22, 0xE7, 0xAD, 0x35, 0x85, 0xE2, 0xF9, 0x37, 0xE8, 0x1C, 0x75, 0xDF, 0x6E,\par
+    0x47, 0xF1, 0x1A, 0x71, 0x1D, 0x29, 0xC5, 0x89, 0x6F, 0xB7, 0x62, 0x0E, 0xAA, 0x18, 0xBE, 0x1B,\par
+    0xFC, 0x56, 0x3E, 0x4B, 0xC6, 0xD2, 0x79, 0x20, 0x9A, 0xDB, 0xC0, 0xFE, 0x78, 0xCD, 0x5A, 0xF4,\par
+    0x1F, 0xDD, 0xA8, 0x33, 0x88, 0x07, 0xC7, 0x31, 0xB1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xEC, 0x5F,\par
+    0x60, 0x51, 0x7F, 0xA9, 0x19, 0xB5, 0x4A, 0x0D, 0x2D, 0xE5, 0x7A, 0x9F, 0x93, 0xC9, 0x9C, 0xEF,\par
+    0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,\par
+    0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,\par
+)\par
+\par
+state = [\par
+    [251, 64, 182, 81],\par
+    [146, 168, 33, 80],\par
+    [199, 159, 195, 24],\par
+    [64, 80, 182, 255],\par
+]\par
+\par
+def sub_bytes(s, sbox=s_box):\par
+    return list(map(lambda x: sbox[x], sum(s, [])))\par
+print(bytes(sub_bytes(state, sbox=inv_s_box)))\par
+\par
+\par
+\b\fs28 Output :-  b'crypto\{l1n34rly\}'\b0\fs22\par
+\par
+\par
+\b\fs32 17 Diffusion through Permutation\par
+\b0\fs22\par
+# Diffusion through Permutation lab\par
+#in this we are using the given python code we set the range for shifting the row \par
+# for the output we converting all the value from state into char and getting the string output#\par
+import numpy as np\par
+\par
+def shift_rows(s):\par
+    s[0][1], s[1][1], s[2][1], s[3][1] = s[1][1], s[2][1], s[3][1], s[0][1]\par
+    s[0][2], s[1][2], s[2][2], s[3][2] = s[2][2], s[3][2], s[0][2], s[1][2]\par
+    s[0][3], s[1][3], s[2][3], s[3][3] = s[3][3], s[0][3], s[1][3], s[2][3]\par
+\par
+def inv_shift_rows(s):    \par
+    for i in range(3):\par
+        shift_rows(s)\par
+xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)\par
+def mix_single_column(a):\par
+    t = a[0] ^ a[1] ^ a[2] ^ a[3]\par
+    u = a[0]\par
+    a[0] ^= t ^ xtime(a[0] ^ a[1])\par
+    a[1] ^= t ^ xtime(a[1] ^ a[2])\par
+    a[2] ^= t ^ xtime(a[2] ^ a[3])\par
+    a[3] ^= t ^ xtime(a[3] ^ u)\par
+def mix_columns(s):\par
+    for i in range(4):\par
+        mix_single_column(s[i])\par
+def inv_mix_columns(s):\par
+    for i in range(4):\par
+        u = xtime(xtime(s[i][0] ^ s[i][2]))\par
+        v = xtime(xtime(s[i][1] ^ s[i][3]))\par
+        s[i][0] ^= u\par
+        s[i][1] ^= v\par
+        s[i][2] ^= u\par
+        s[i][3] ^= v\par
+    mix_columns(s)\par
+state = [\par
+    [108, 106, 71, 86],\par
+    [96, 62, 38, 72],\par
+    [42, 184, 92, 209],\par
+    [94, 79, 8, 54],\par
+]\par
+inv_mix_columns(state)\par
+inv_shift_rows(state)\par
+print("".join([chr(j) for i in state for j in i]))\par
+\par
+\par
+\b\fs28 Output :-  crypto\{d1ffUs3R\}\b0\fs22\par
+\par
+\par
+\b\fs32 18 Bringing It All Together\par
+\b0\fs22\par
+# Bringing It All Together lab\par
+#each value from the state matrix is replaced by the sbox\par
+# after replacing these bytes value is converted into string of character to get answer\par
+\par
+\par
+\par
+s_box = (\par
+    0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,\par
+    0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,\par
+    0xB7, 0xFD, 0x93, 0x26, 0x36, 0x3F, 0xF7, 0xCC, 0x34, 0xA5, 0xE5, 0xF1, 0x71, 0xD8, 0x31, 0x15,\par
+    0x04, 0xC7, 0x23, 0xC3, 0x18, 0x96, 0x05, 0x9A, 0x07, 0x12, 0x80, 0xE2, 0xEB, 0x27, 0xB2, 0x75,\par
+    0x09, 0x83, 0x2C, 0x1A, 0x1B, 0x6E, 0x5A, 0xA0, 0x52, 0x3B, 0xD6, 0xB3, 0x29, 0xE3, 0x2F, 0x84,\par
+    0x53, 0xD1, 0x00, 0xED, 0x20, 0xFC, 0xB1, 0x5B, 0x6A, 0xCB, 0xBE, 0x39, 0x4A, 0x4C, 0x58, 0xCF,\par
+    0xD0, 0xEF, 0xAA, 0xFB, 0x43, 0x4D, 0x33, 0x85, 0x45, 0xF9, 0x02, 0x7F, 0x50, 0x3C, 0x9F, 0xA8,\par
+    0x51, 0xA3, 0x40, 0x8F, 0x92, 0x9D, 0x38, 0xF5, 0xBC, 0xB6, 0xDA, 0x21, 0x10, 0xFF, 0xF3, 0xD2,\par
+    0xCD, 0x0C, 0x13, 0xEC, 0x5F, 0x97, 0x44, 0x17, 0xC4, 0xA7, 0x7E, 0x3D, 0x64, 0x5D, 0x19, 0x73,\par
+    0x60, 0x81, 0x4F, 0xDC, 0x22, 0x2A, 0x90, 0x88, 0x46, 0xEE, 0xB8, 0x14, 0xDE, 0x5E, 0x0B, 0xDB,\par
+    0xE0, 0x32, 0x3A, 0x0A, 0x49, 0x06, 0x24, 0x5C, 0xC2, 0xD3, 0xAC, 0x62, 0x91, 0x95, 0xE4, 0x79,\par
+    0xE7, 0xC8, 0x37, 0x6D, 0x8D, 0xD5, 0x4E, 0xA9, 0x6C, 0x56, 0xF4, 0xEA, 0x65, 0x7A, 0xAE, 0x08,\par
+    0xBA, 0x78, 0x25, 0x2E, 0x1C, 0xA6, 0xB4, 0xC6, 0xE8, 0xDD, 0x74, 0x1F, 0x4B, 0xBD, 0x8B, 0x8A,\par
+    0x70, 0x3E, 0xB5, 0x66, 0x48, 0x03, 0xF6, 0x0E, 0x61, 0x35, 0x57, 0xB9, 0x86, 0xC1, 0x1D, 0x9E,\par
+    0xE1, 0xF8, 0x98, 0x11, 0x69, 0xD9, 0x8E, 0x94, 0x9B, 0x1E, 0x87, 0xE9, 0xCE, 0x55, 0x28, 0xDF,\par
+    0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16,\par
+)\par
+\par
+inv_s_box = (\par
+    0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB,\par
+    0x7C, 0xE3, 0x39, 0x82, 0x9B, 0x2F, 0xFF, 0x87, 0x34, 0x8E, 0x43, 0x44, 0xC4, 0xDE, 0xE9, 0xCB,\par
+    0x54, 0x7B, 0x94, 0x32, 0xA6, 0xC2, 0x23, 0x3D, 0xEE, 0x4C, 0x95, 0x0B, 0x42, 0xFA, 0xC3, 0x4E,\par
+    0x08, 0x2E, 0xA1, 0x66, 0x28, 0xD9, 0x24, 0xB2, 0x76, 0x5B, 0xA2, 0x49, 0x6D, 0x8B, 0xD1, 0x25,\par
+    0x72, 0xF8, 0xF6, 0x64, 0x86, 0x68, 0x98, 0x16, 0xD4, 0xA4, 0x5C, 0xCC, 0x5D, 0x65, 0xB6, 0x92,\par
+    0x6C, 0x70, 0x48, 0x50, 0xFD, 0xED, 0xB9, 0xDA, 0x5E, 0x15, 0x46, 0x57, 0xA7, 0x8D, 0x9D, 0x84,\par
+    0x90, 0xD8, 0xAB, 0x00, 0x8C, 0xBC, 0xD3, 0x0A, 0xF7, 0xE4, 0x58, 0x05, 0xB8, 0xB3, 0x45, 0x06,\par
+    0xD0, 0x2C, 0x1E, 0x8F, 0xCA, 0x3F, 0x0F, 0x02, 0xC1, 0xAF, 0xBD, 0x03, 0x01, 0x13, 0x8A, 0x6B,\par
+    0x3A, 0x91, 0x11, 0x41, 0x4F, 0x67, 0xDC, 0xEA, 0x97, 0xF2, 0xCF, 0xCE, 0xF0, 0xB4, 0xE6, 0x73,\par
+    0x96, 0xAC, 0x74, 0x22, 0xE7, 0xAD, 0x35, 0x85, 0xE2, 0xF9, 0x37, 0xE8, 0x1C, 0x75, 0xDF, 0x6E,\par
+    0x47, 0xF1, 0x1A, 0x71, 0x1D, 0x29, 0xC5, 0x89, 0x6F, 0xB7, 0x62, 0x0E, 0xAA, 0x18, 0xBE, 0x1B,\par
+    0xFC, 0x56, 0x3E, 0x4B, 0xC6, 0xD2, 0x79, 0x20, 0x9A, 0xDB, 0xC0, 0xFE, 0x78, 0xCD, 0x5A, 0xF4,\par
+    0x1F, 0xDD, 0xA8, 0x33, 0x88, 0x07, 0xC7, 0x31, 0xB1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xEC, 0x5F,\par
+    0x60, 0x51, 0x7F, 0xA9, 0x19, 0xB5, 0x4A, 0x0D, 0x2D, 0xE5, 0x7A, 0x9F, 0x93, 0xC9, 0x9C, 0xEF,\par
+    0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,\par
+    0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D,\par
+)\par
+state = [\par
+    [251, 64, 182, 81],\par
+    [146, 168, 33, 80],\par
+    [199, 159, 195, 24],\par
+    [64, 80, 182, 255],\par
+]\par
+def sub_bytes(s, sbox=s_box):\par
+    out = []\par
+    for i in s:\par
+        for c in i:\par
+            out.append(sbox[c])\par
+    out = [(c.to_bytes(2,'big')).decode() for c in out]\par
+    return(''.join(out))\par
+print(sub_bytes(state, sbox=inv_s_box))  \par
+\par
+\par
+\b\fs28 Output :-  crypto\{l1n34rly\}\b0\fs22\par
+\par
+\par
+\b\fs32 19 Passwords as Keys\par
+\b0\fs22\par
+\par
+#Passwords as Keys lab\par
+# in this task we are using aes  the keys are generated by hashing each word from word.txt file using md5 to generate a key\par
+# then decrypting it and confirming whether the results has crypto\{\}#\par
+\par
+from Crypto.Cipher import AES\par
+import hashlib\par
+import random\par
+def decrypt(ciphertext, password_hash):\par
+    ciphertext = bytes.fromhex(ciphertext)\par
+    key = password_hash\par
+    cipher = AES.new(key, AES.MODE_ECB)\par
+    try:\par
+        decrypted = cipher.decrypt(ciphertext)\par
+    except ValueError as e:\par
+        return \{"error": str(e)\}\par
+    return decrypted\par
+with open("words.txt") as f:\par
+    words = [w.strip() for w in f.readlines()]\par
+keyword = random.choice(words)\par
+KEY = hashlib.md5(keyword.encode()).digest()\par
+l = len(words)\par
+for i in range(l):\par
+    KEY = hashlib.md5(words[i].encode()).digest()\par
+    decrypted = decrypt("c92b7734070205bdf6c0087a751466ec13ae15e6f1bcdd3f3a535ec0f4bbae66", KEY)\par
+    if b'crypto' in decrypted:\par
+        print(decrypted)\par
+\par
+\par
+\b\fs28 Output :-  crypto\{k3y5__r__n07__p455w0rdz?\}\b0\fs22\par
+\par
+\par
+\par
+\b\fs32 20 Modes of Operation Starter\par
+\b0\fs22\par
+#we are directly sending encrypt a flag using AES and we get cipher text\par
+# then we are sending another request to decrypt ciphertext which we got which gives us a hex and \par
+# then we can convert it into plaintext\par
+\par
+import requests\par
+url = "{{\field{\*\fldinst{HYPERLINK https://aes.cryptohack.org/block_cipher_starter/ }}{\fldrslt{https://aes.cryptohack.org/block_cipher_starter/\ul0\cf0}}}}\f0\fs22 "\par
+ciphertext = requests.get(url + "encrypt_flag/").json()["ciphertext"]\par
+plaintext_hex = requests.get(url + "decrypt/" + ciphertext ).json().get("plaintext")\par
+print(bytes.fromhex(plaintext_hex).decode())\par
+\par
+\par
+\b\fs28 Output :-  crypto\{bl0ck_c1ph3r5_4r3_f457_!\}\b0\fs22\par
+\par
+\par
+\par
+\b\fs32 21 ECB Oracle\par
+\b0\fs22\par
+#we are decrypting a encryptedflag using AES in CBC using XOR \par
+# then in [decrypt_block2 = xor(response(block2), block1)] we are spliting it in blocks and then again using XOR to get the flag #\par
+\par
+import requests\par
+from Crypto.Cipher import AES\par
+from Crypto.Util.Padding import pad, unpad\par
+from Crypto.Util.number import long_to_bytes, bytes_to_long\par
+def response(byte_string):\par
+\tab url = "{{\field{\*\fldinst{HYPERLINK http://aes.cryptohack.org/ecbcbcwtf/decrypt/ }}{\fldrslt{http://aes.cryptohack.org/ecbcbcwtf/decrypt/\ul0\cf0}}}}\f0\fs22 "\par
+\tab url += byte_string.hex()\par
+\tab url += "/"\par
+\tab r = requests.get(url)\par
+\tab js = r.json()\par
+\tab return bytes.fromhex(js["plaintext"])\par
+def encrypt_flag():\par
+\tab url = "{{\field{\*\fldinst{HYPERLINK http://aes.cryptohack.org/ecbcbcwtf/encrypt_flag/ }}{\fldrslt{http://aes.cryptohack.org/ecbcbcwtf/encrypt_flag/\ul0\cf0}}}}\f0\fs22 "\par
+\tab r = requests.get(url)\par
+\tab js = r.json()\par
+\tab return bytes.fromhex(js["ciphertext"])\par
+def xor(a, b):\par
+\tab return long_to_bytes(bytes_to_long(a) ^ bytes_to_long(b))\par
+enc = encrypt_flag()\par
+iv = enc[:16]\par
+block1 = enc[16:32]\par
+block2 = enc[32:]\par
+decrypt_block1 = xor(response(block1), iv)\par
+decrypt_block2 = xor(response(block2), block1)\par
+print(decrypt_block1 + decrypt_block2)\par
+\par
+\par
+\b\fs28 Output :-  crypto\{p3n6u1n5_h473_3cb\}\b0\fs22\par
+\par
+\par
+\b\fs32 22 ECB CBC WTF\par
+\b0\fs22\par
+# ECB CBC WTF lab\par
+#we are encrypting the flag AES in CBC mode to get cipher text\par
+# then we XOR the ciphertext block with original block to get decrypted blocks\par
+# then we combine the blocks to get string value#\par
+\par
+Score: 3\par
+import requests\par
+url_base = '{{\field{\*\fldinst{HYPERLINK http://aes.cryptohack.org/ecbcbcwtf }}{\fldrslt{http://aes.cryptohack.org/ecbcbcwtf\ul0\cf0}}}}\f0\fs22 '\par
+BLOCK_SIZE = 16\par
+def hack():\par
+  response = requests.get(url="%s/encrypt_flag/" % url_base).json()\par
+  ciphertext = response['ciphertext']\par
+    response = requests.get(url="%s/decrypt/%s" % (url_base, ciphertext)).json()\par
+  plaintext = bytes.fromhex(response['plaintext'])\par
+  ciphertext = bytes.fromhex(ciphertext)\par
+flag = bytearray()\par
+  for i in range((len(ciphertext)//BLOCK_SIZE)-1):\par
+    flag.extend(bytearray(a ^ b for a, b in zip(ciphertext[i*BLOCK_SIZE:(i+1)*BLOCK_SIZE], plaintext[(i+1)*BLOCK_SIZE:(i+2)*BLOCK_SIZE])))\par
+  return flag.decode()\par
+if __name__ == '__main__':\par
+  flag = hack()\par
+  print(flag)\par
+  \par
+\par
+\b\fs28 Output :-  crypto\{3cb_5uck5_4v01d_17_!!!!!\}\b0\fs22\par
+\par
+\par
+\b\fs32 23 flipping cookie\par
+\b0\fs22\par
+# Flipping Cookie lab\par
+#we are manupalating an encrypted cookie to change its value from admin=false to true using XOR\par
+# then we send modified cookie to the server to confirm the authorization  #\par
+\par
+def get_cookie():\par
+    url = "{{\field{\*\fldinst{HYPERLINK http://aes.cryptohack.org/flipping_cookie/get_cookie/ }}{\fldrslt{http://aes.cryptohack.org/flipping_cookie/get_cookie/\ul0\cf0}}}}\f0\fs22 "\par
+    r = requests.get(url)\par
+    js = r.json()\par
+    return bytes.fromhex(js["cookie"])\par
+def response(cookie, iv):\par
+    url = "{{\field{\*\fldinst{HYPERLINK http://aes.cryptohack.org/flipping_cookie/check_admin/ }}{\fldrslt{http://aes.cryptohack.org/flipping_cookie/check_admin/\ul0\cf0}}}}\f0\fs22 "\par
+    url += cookie.hex()\par
+    url += "/"\par
+    url += iv.hex()\par
+    url += "/"\par
+    r = requests.get(url)\par
+    js = r.json()\par
+    print(js)\par
+def xor(a, b):\par
+    return long_to_bytes(bytes_to_long(a) ^ bytes_to_long(b))\par
+cookie = get_cookie()\par
+origin = b'admin=False;expi'\par
+goal = b'admin=True;\\x05\\x05\\x05\\x05\\x05'\par
+iv = cookie[:16]\par
+block1 = cookie[16:32]\par
+block2 = cookie[32:]\par
+send_iv = xor(xor(origin, goal), iv)\par
+response(block1, send_iv)\par
+\par
+\par
+\b\fs28 Output :-  \{'flag': 'crypto\{4u7h3n71c4710n_15_3553n714l\}'\}\b0\fs22\par
+\par
+\par
+\b\fs32 24 Symmetry\par
+\b0\fs22\par
+# Symmetry lab\par
+#we are extracting an encrypted png file from the url\par
+# then we are XOR the result with a PNG header to get the outcome image#\par
+\par
+import requests\par
+import json\par
+def get_encrypted():\par
+    url = "{{\field{\*\fldinst{HYPERLINK http://aes.cryptohack.org/bean_counter/encrypt/ }}{\fldrslt{http://aes.cryptohack.org/bean_counter/encrypt/\ul0\cf0}}}}\f0\fs22 "\par
+    r = requests.get(url)\par
+    enc = (json.loads(r.text))['encrypted']\par
+    return enc\par
+enc = get_encrypted()\par
+tmp = bytes.fromhex(enc)\par
+enc_bytes = [tmp[i:i+16] for i in range(0,len(tmp),16)]\par
+png_header = ['89', '50', '4E', '47', '0D', '0A', '1A', '0A', '00', '00', '00', '0D', '49', '48', '44', '52']\par
+key_stream = ([int(a, 16)^b for a,b in zip(png_header,enc_bytes[0])])\par
+p = []\par
+for i in range(len(enc_bytes)):\par
+    p.append(bytes([a^b for a,b in zip(key_stream,enc_bytes[i])]))\par
+pt = b''\par
+for i in p:\par
+    pt += i\par
+with open(r"C:\\path\\to\\flag.png", 'wb') as f:\par
+    f.write(pt)\par
+\par
+\par
+\b\fs28 Output :-  \b0\fs22\par
+\par
+\par
+\b\fs32 25 Successive Powers\par
+\b0\fs22\par
+#we are already given that successive power of x modulo a three-digit prime p\par
+# we will take different value of p  for x1 mod p = 588,665... \par
+# check for the value in which we get x value constant \par
+\par
+\par
+\par
+from Crypto.Util.number import inverse\par
+import gmpy2\par
+t = [588, 665, 216, 113, 642, 4, 836, 114, 851, 492, 819, 237]\par
+pval = max(t) + 1  \par
+for p in range(pval, 1000000):  \par
+    try:\par
+        x = [(t[i] * inverse(t[i-1], p)) % p for i in range(1, len(t))]\par
+        if len(set(x)) == 1:\par
+            print("Found p:", p)\par
+            print("x:", x)\par
+            break  \par
+    except Exception as e:\par
+        print(f"Error for p=\{p\}: \{e\}")\par
+        pass\par
+\par
+\par
+\b\fs28 Output :-  crypto\{919,209\}\b0\fs22\par
+\par
+\par
+\b\fs32 26 Broken RSA\par
+\b0\fs22\par
+# Broken RSA lab\par
+# we are decrypting the cyphertext using maths roots of unity method\par
+# we dycrypted the encrypted ciphertext multiple time by adjusting numbers until any meaningful plaintext generates #\par
+\par
+\par
+import Crypto.Util.number as cun\par
+from pprint import pprint\par
+def roots_of_unity(e, phi, n, rounds=500): \par
+    phi_coprime = phi\par
+    while cun.GCD(phi_coprime, e) != 1:\par
+        phi_coprime //= cun.GCD(phi_coprime, e)\par
+    roots = set(pow(i, phi_coprime, n) for i in range(1, rounds))\par
+    assert all(pow(root, e, n) == 1 for root in roots)\par
+    return roots, phi_coprime\par
+e = 16\par
+n=27772857409875257529415990911214211975844307184430241451899407838750503024323367895540981606586709985980003435082116995888017731426634845808624796292507989171497629109450825818587383112280639037484593490692935998202437639626747133650990603333094513531505209954273004473567193235535061942991750932725808679249964667090723480397916715320876867803719301313440005075056481203859010490836599717523664197112053206745235908610484907715210436413015546671034478367679465233737115549451849810421017181842615880836253875862101545582922437858358265964489786463923280312860843031914516061327752183283528015684588796400861331354873\par
+c = 11303174761894431146735697569489134747234975144162172162401674567273034831391936916397234068346115459134602443963604063679379285919302225719050193590179240191429612072131629779948379821039610415099784351073443218911356328815458050694493726951231241096695626477586428880220528001269746547018741237131741255022371957489462380305100634600499204435763201371188769446054925748151987175656677342779043435047048130599123081581036362712208692748034620245590448762406543804069935873123161582756799517226666835316588896306926659321054276507714414876684738121421124177324568084533020088172040422767194971217814466953837590498718\par
+phi = n-1 \par
+roots, phi_coprime = roots_of_unity(e, phi, n)\par
+d = pow(e, -1, phi_coprime)\par
+m = pow(c, d, n)\par
+assert pow(m, e, n) == c\par
+ms = [(m * root) % n for root in roots]\par
+ms = [cun.long_to_bytes(m) for m in ms]\par
+pprint(ms)\par
+\par
+\par
+\b\fs28 Output :-  \b0\fs22\par
+\par
+\par
+\par
+\b\fs32 27 Cofactor Cofantasy\par
+\b0\fs22\par
+#we connected to server via telnet we constantly send quaries to the server to check its response time\par
+# then we use clustering technique to determin the bits of the flag#\par
+\par
+import telnetlib\par
+import json\par
+from statistics import median, mean\par
+from tqdm import tqdm, trange\par
+def two_clursturing(datas, epoch=10):\par
+    centor = [min(datas), max(datas)]\par
+    label = [0] * len(datas)\par
+    for _ in range(epoch):\par
+        bag = [[], []]\par
+        for i in range(len(datas)):\par
+            if abs(datas[i] - centor[0]) < abs(datas[i] - centor[1]):\par
+                label[i] = 0\par
+                bag[0].append(datas[i])\par
+            else:\par
+                label[i] = 1\par
+                bag[1].append(datas[i])\par
+        centor[0] = mean(bag[0])\par
+        centor[1] = mean(bag[1])\par
+        centor.sort()\par
+    return label\par
+cli = telnetlib.Telnet("socket.cryptohack.org", 13398)\par
+print(cli.read_until(b"\\n"))\par
+precision = 10\par
+found = b""\par
+pbar = trange(0 * 8, 43 * 8, 8)\par
+for i in pbar:\par
+    val = 0\par
+    ssamp = []\par
+    for j in trange(8, leave=False):\par
+        sample = []\par
+        query = \{"option": "get_bit", "i": i + j\}\par
+        eq = json.dumps(query).encode()\par
+                for _ in range(precision):\par
+            st = time.time_ns()\par
+            cli.write(eq)\par
+            cli.read_until(b"\\n")\par
+            ed = time.time_ns()\par
+            sample.append(ed - st)\par
+        ssamp.append(median(sample))\par
+b = "".join(map(str, two_clursturing(list(reversed(ssamp)))))\par
+    found += bytes([int(b, 2)])\par
+    pbar.set_description(str(found))\par
+print("Recovered Flag:", found.decode())\par
+\par
+\b\fs28 Output :-  crypto\{0ver3ng1neering_ch4lleng3_s0lution$\}\b0\fs22\par
+\par
+\par
+\b\fs32 28 Computing Public Values\par
+\b0\fs22\par
+#In this we use modular function [2^a mod p] to get this formula pow(g,a,p) \par
+# If we print this we will get our flag #\par
+g =2\par
+p=2410312426921032588552076022197566074856950548502459942654116941958108831682612228890093858261341614673227141477904012196503648957050582631942730706805009223062734745341073406696246014589361659774041027169249453200378729434170325843778659198143763193776859869524088940195577346119843545301547043747207749969763750084308926339295559968882457872412993810129130294592999947926365264059284647209730384947211681434464714438488520940127459844288859336526896320919633919\par
+a=972107443837033796245864316200458246846904598488981605856765890478853088246897345487328491037710219222038930943365848626194109830309179393018216763327572120124760140018038673999837643377590434413866611132403979547150659053897355593394492586978400044375465657296027592948349589216415363722668361328689588996541370097559090335137676411595949335857341797148926151694299575970292809805314431447043469447485957669949989090202320234337890323293401862304986599884732815\par
+print(pow(g,a,p))\par
+\par
+\par
+\b\fs28 Output :-  1806857697840726523322586721820911358489420128129248078673933653533930681676181753849411715714173604352323556558783759252661061186320274214883104886050164368129191719707402291577330485499513522368289395359523901406138025022522412429238971591272160519144672389532393673832265070057319485399793101182682177465364396277424717543434017666343807276970864475830391776403957550678362368319776566025118492062196941451265638054400177248572271342548616103967411990437357924\b0\fs22\par
+\par
+\par
+\b\fs32 29 Computing Shared Secrets\par
+\b0\fs22\par
+#here we perform modular exponentiation (A^b mod p) \par
+# then we use Diffie-Hellman key exchange to compute [pow(A,b,p)] to get results #\par
+g = 2\par
+p=2410312426921032588552076022197566074856950548502459942654116941958108831682612228890093858261341614673227141477904012196503648957050582631942730706805009223062734745341073406696246014589361659774041027169249453200378729434170325843778659198143763193776859869524088940195577346119843545301547043747207749969763750084308926339295559968882457872412993810129130294592999947926365264059284647209730384947211681434464714438488520940127459844288859336526896320919633919\par
+A =70249943217595468278554541264975482909289174351516133994495821400710625291840101960595720462672604202133493023241393916394629829526272643847352371534839862030410331485087487331809285533195024369287293217083414424096866925845838641840923193480821332056735592483730921055532222505605661664236182285229504265881752580410194731633895345823963910901731715743835775619780738974844840425579683385344491015955892106904647602049559477279345982530488299847663103078045601\par
+b = 12019233252903990344598522535774963020395770409445296724034378433497976840167805970589960962221948290951873387728102115996831454482299243226839490999713763440412177965861508773420532266484619126710566414914227560103715336696193210379850575047730388378348266180934946139100479831339835896583443691529372703954589071507717917136906770122077739814262298488662138085608736103418601750861698417340264213867753834679359191427098195887112064503104510489610448294420720\par
+B = 518386956790041579928056815914221837599234551655144585133414727838977145777213383018096662516814302583841858901021822273505120728451788412967971809038854090670743265187138208169355155411883063541881209288967735684152473260687799664130956969450297407027926009182761627800181901721840557870828019840218548188487260441829333603432714023447029942863076979487889569452186257333512355724725941390498966546682790608125613166744820307691068563387354936732643569654017172\par
+res = pow(A,b,p)\par
+print(res)\par
+\par
+\par
+\b\fs28 Output :-  1174130740413820656533832746034841985877302086316388380165984436672307692443711310285014138545204369495478725102882673427892104539120952393788961051992901649694063179853598311473820341215879965343136351436410522850717408445802043003164658348006577408558693502220285700893404674592567626297571222027902631157072143330043118418467094237965591198440803970726604537807146703763571606861448354607502654664700390453794493176794678917352634029713320615865940720837909466\b0\fs22\par
+\par
+\par
+\b\fs32 30 crossed wires\par
+\b0\fs22  \par
+#we are decrypting the ciphertext using multiple number og public keys with their respective exponents in reverse order \par
+# it calculates every special key for each value  to unlock the text and then converting them into redable format#\par
+pip install pycryptodome\par
+\par
+from Crypto.Util import number\par
+# Since encryption was use friends' key, e and d are useless\par
+N, _ = (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 2734411677251148030723138005716109733838866545375527602018255159319631026653190783670493107936401603981429171880504360560494771017246468702902647370954220312452541342858747590576273775107870450853533717116684326976263006435733382045807971890762018747729574021057430331778033982359184838159747331236538501849965329264774927607570410347019418407451937875684373454982306923178403161216817237890962651214718831954215200637651103907209347900857824722653217179548148145687181377220544864521808230122730967452981435355334932104265488075777638608041325256776275200067541533022527964743478554948792578057708522350812154888097)\par
+# (N, e) pairs from friends\par
+friend_keys = [(21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 106979), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 108533), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 69557), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 97117), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 103231)]\par
+c = 20304610279578186738172766224224793119885071262464464448863461184092225736054747976985179673905441502689126216282897704508745403799054734121583968853999791604281615154100736259131453424385364324630229671185343778172807262640709301838274824603101692485662726226902121105591137437331463201881264245562214012160875177167442010952439360623396658974413900469093836794752270399520074596329058725874834082188697377597949405779039139194196065364426213208345461407030771089787529200057105746584493554722790592530472869581310117300343461207750821737840042745530876391793484035024644475535353227851321505537398888106855012746117\par
+# factorization of N\par
+p = 134460556242811604004061671529264401215233974442536870999694816691450423689575549530215841622090861571494882591368883283016107051686642467260643894947947473532769025695530343815260424314855023688439603651834585971233941772580950216838838690315383700689885536546289584980534945897919914730948196240662991266027\par
+q = 161469718942256895682124261315253003309512855995894840701317251772156087404025170146631429756064534716206164807382734456438092732743677793224010769460318383691408352089793973150914149255603969984103815563896440419666191368964699279209687091969164697704779792586727943470780308857107052647197945528236341228473\par
+phi = (q-1)*(p-1)\par
+# reverse encryption process\par
+for key in friend_keys[::-1]:\par
+    d = number.inverse(key[1], phi)\par
+    c = pow(c, d, N)\par
+print(number.long_to_bytes(c))!pip install pycryptodome\par
+from Crypto.Util import number\par
+# Since encryption was use friends' key, e and d are useless\par
+N, _ = (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 2734411677251148030723138005716109733838866545375527602018255159319631026653190783670493107936401603981429171880504360560494771017246468702902647370954220312452541342858747590576273775107870450853533717116684326976263006435733382045807971890762018747729574021057430331778033982359184838159747331236538501849965329264774927607570410347019418407451937875684373454982306923178403161216817237890962651214718831954215200637651103907209347900857824722653217179548148145687181377220544864521808230122730967452981435355334932104265488075777638608041325256776275200067541533022527964743478554948792578057708522350812154888097)\par
+# (N, e) pairs from friends\par
+friend_keys = [(21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 106979), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 108533), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 69557), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 97117), (21711308225346315542706844618441565741046498277716979943478360598053144971379956916575370343448988601905854572029635846626259487297950305231661109855854947494209135205589258643517961521594924368498672064293208230802441077390193682958095111922082677813175804775628884377724377647428385841831277059274172982280545237765559969228707506857561215268491024097063920337721783673060530181637161577401589126558556182546896783307370517275046522704047385786111489447064794210010802761708615907245523492585896286374996088089317826162798278528296206977900274431829829206103227171839270887476436899494428371323874689055690729986771, 103231)]\par
+c = 20304610279578186738172766224224793119885071262464464448863461184092225736054747976985179673905441502689126216282897704508745403799054734121583968853999791604281615154100736259131453424385364324630229671185343778172807262640709301838274824603101692485662726226902121105591137437331463201881264245562214012160875177167442010952439360623396658974413900469093836794752270399520074596329058725874834082188697377597949405779039139194196065364426213208345461407030771089787529200057105746584493554722790592530472869581310117300343461207750821737840042745530876391793484035024644475535353227851321505537398888106855012746117\par
+# factorization of N\par
+p = 134460556242811604004061671529264401215233974442536870999694816691450423689575549530215841622090861571494882591368883283016107051686642467260643894947947473532769025695530343815260424314855023688439603651834585971233941772580950216838838690315383700689885536546289584980534945897919914730948196240662991266027\par
+q = 161469718942256895682124261315253003309512855995894840701317251772156087404025170146631429756064534716206164807382734456438092732743677793224010769460318383691408352089793973150914149255603969984103815563896440419666191368964699279209687091969164697704779792586727943470780308857107052647197945528236341228473\par
+phi = (q-1)*(p-1)\par
+# reverse encryption process\par
+for key in friend_keys[::-1]:\par
+    d = number.inverse(key[1], phi)\par
+    c = pow(c, d, N)\par
+print(number.long_to_bytes(c))\par
+\par
+\par
+\b\fs28 Output :-  crypto\{s0m3th1ng5_c4n_b3_t00_b1g\}\b0\fs22\par
+\par
+\par
+\b\fs32 31 Deriving Symmetric Keys\par
+\b0\fs22\par
+#we use Diffie-Hellman key exchange to get a 16-byte key from this shared secret using SHA-1\par
+# Then we use AES algorithm in CBC mode \par
+# In this code we perform AES decryption to get encrypted flag\par
+#  \par
+from Crypto.Cipher import AES\par
+from Crypto.Util.Padding import pad, unpad\par
+import hashlib\par
+g = 2\par
+p = 2410312426921032588552076022197566074856950548502459942654116941958108831682612228890093858261341614673227141477904012196503648957050582631942730706805009223062734745341073406696246014589361659774041027169249453200378729434170325843778659198143763193776859869524088940195577346119843545301547043747207749969763750084308926339295559968882457872412993810129130294592999947926365264059284647209730384947211681434464714438488520940127459844288859336526896320919633919\par
+A= 112218739139542908880564359534373424013016249772931962692237907571990334483528877513809272625610512061159061737608547288558662879685086684299624481742865016924065000555267977830144740364467977206555914781236397216033805882207640219686011643468275165718132888489024688846101943642459655423609111976363316080620471928236879737944217503462265615774774318986375878440978819238346077908864116156831874695817477772477121232820827728424890845769152726027520772901423784\par
+b = 197395083814907028991785772714920885908249341925650951555219049411298436217190605190824934787336279228785809783531814507661385111220639329358048196339626065676869119737979175531770768861808581110311903548567424039264485661330995221907803300824165469977099494284722831845653985392791480264712091293580274947132480402319812110462641143884577706335859190668240694680261160210609506891842793868297672619625924001403035676872189455767944077542198064499486164431451944\par
+B= 1241972460522075344783337556660700537760331108332735677863862813666578639518899293226399921252049655031563612905395145236854443334774555982204857895716383215705498970395379526698761468932147200650513626028263449605755661189525521343142979265044068409405667549241125597387173006460145379759986272191990675988873894208956851773331039747840312455221354589910726982819203421992729738296452820365553759182547255998984882158393688119629609067647494762616719047466973581\par
+shared_secret = pow(A,b,p)\par
+iv = '737561146ff8194f45290f5766ed6aba'\par
+encrypted_flag = '39c99bf2f0c14678d6a5416faef954b5893c316fc3c48622ba1fd6a9fe85f3dc72a29c394cf4bc8aff6a7b21cae8e12c'\par
+sha1 = hashlib.sha1()\par
+sha1.update(str(shared_secret).encode('ascii'))\par
+key = sha1.digest()[:16]\par
+ct = bytes.fromhex(encrypted_flag)\par
+iv = bytes.fromhex(iv)\par
+cipher = AES.new(key,AES.MODE_CBC,iv)\par
+flag = cipher.decrypt(ct)\par
+print(flag)\par
+\b\fs28\par
+Output :-  crypto\{sh4r1ng_s3cret5_w1th_fr13nd5\}\b0\fs22\par
+\par
+\par
+\b\fs32 32 Endless emails\par
+\b0\fs22\par
+# we are using  Chinese Remainder Theorem (CRT)\par
+# we are combining multiple modular equations and then we extraxt the secrect message\par
+#check if root is exact and \par
+# compare it with (crypto\{  )\par
+from itertools import combinations\par
+from Crypto.Util.number import *\par
+import gmpy2\par
+def crt(remainders, mod):\par
+    assert len(remainders) == len(mod)\par
+    N = 1\par
+    for i in mod:\par
+        N *= i\par
+    Ni = []\par
+    for i in range(len(mod)):\par
+        Ni.append(N // mod[i])\par
+    Y = []\par
+    for i in range(len(mod)):\par
+        Y.append(pow(Ni[i], -1, mod[i]))\par
+    res = 0\par
+    for i in range(len(mod)):\par
+        res += remainders[i] * Ni[i] * Y[i]\par
+    return res % N\par
+n0 = 14528915758150659907677315938876872514853653132820394367681510019000469589767908107293777996420037715293478868775354645306536953789897501630398061779084810058931494642860729799059325051840331449914529594113593835549493208246333437945551639983056810855435396444978249093419290651847764073607607794045076386643023306458718171574989185213684263628336385268818202054811378810216623440644076846464902798568705083282619513191855087399010760232112434412274701034094429954231366422968991322244343038458681255035356984900384509158858007713047428143658924970374944616430311056440919114824023838380098825914755712289724493770021\par
+e = 3\par
+c0 = 6965891612987861726975066977377253961837139691220763821370036576350605576485706330714192837336331493653283305241193883593410988132245791554283874785871849223291134571366093850082919285063130119121338290718389659761443563666214229749009468327825320914097376664888912663806925746474243439550004354390822079954583102082178617110721589392875875474288168921403550415531707419931040583019529612270482482718035497554779733578411057633524971870399893851589345476307695799567919550426417015815455141863703835142223300228230547255523815097431420381177861163863791690147876158039619438793849367921927840731088518955045807722225\par
+n = [n0, n1, n2, n3, n4, n5, n6]  \par
+c = [c0, c1, c2, c3, c4, c5, c6]  \par
+for i, j, k in combinations(range(len(n)), 3):\par
+    mod = [n[i], n[j], n[k]]\par
+    remains = [c[i], c[j], c[k]]\par
+        crt_result = crt(remains, mod)\par
+   m = gmpy2.iroot(crt_result, 3)\par
+     if m[1]:\par
+        flag = long_to_bytes(m[0]) \par
+    if b'crypto\{' in flag:\par
+            print(flag)\par
+\par
+\par
+\b\fs28 Output :-  crypto\{1f_y0u_d0nt_p4d_y0u_4r3_Vuln3rabl3\}\b0\fs22\par
+\par
+\par
+\par
+\b\fs32 33 Everthing is big\par
+\b0\fs22\par
+#first we generate big prime number to create RSA public key and then we can encrypt the message  using public key\par
+# then we use Wiener\rquote s attack to attempt get private key and decrypt the message#\par
+\par
+!pip install pycryptodome\par
+!pip install git+https://github.com/maddivy/owiener.git\par
+from Crypto.Util.number import getPrime, bytes_to_long, long_to_bytes\par
+import owiener\par
+FLAG = b"crypto\{?????????????????????????\}"\par
+m = bytes_to_long(FLAG)\par
+def get_huge_RSA():\par
+    p = getPrime(1024)\par
+    q = getPrime(1024)\par
+    N = p * q\par
+    phi = (p - 1) * (q - 1)\par
+    while True:\par
+        d = getPrime(256)\par
+        e = pow(d, -1, phi)\par
+        if e.bit_length() == N.bit_length():\par
+            break\par
+    return N, e\par
+N, e = get_huge_RSA()\par
+c = pow(m, e, N)\par
+print(f'N = \{hex(N)\}')\par
+print(f'e = \{hex(e)\}')\par
+print(f'c = \{hex(c)\}')\par
+\par
+N = int('0xb8af3d3afb893a602de4afe2a29d7615075d1e570f8bad8ebbe9b5b9076594cf06b6e7b30905b6420e950043380ea746f0a14dae34469aa723e946e484a58bcd92d1039105871ffd63ffe64534b7d7f8d84b4a569723f7a833e6daf5e182d658655f739a4e37bd9f4a44aff6ca0255cda5313c3048f56eed5b21dc8d88bf5a8f8379eac83d8523e484fa6ae8dbcb239e65d3777829a6903d779cd2498b255fcf275e5f49471f35992435ee7cade98c8e82a8beb5ce1749349caa16759afc4e799edb12d299374d748a9e3c82e1cc983cdf9daec0a2739dadcc0982c1e7e492139cbff18c5d44529407edfd8e75743d2f51ce2b58573fea6fbd4fe25154b9964d', 16)\par
+e = int('0x9ab58dbc8049b574c361573955f08ea69f97ecf37400f9626d8f5ac55ca087165ce5e1f459ef6fa5f158cc8e75cb400a7473e89dd38922ead221b33bc33d6d716fb0e4e127b0fc18a197daf856a7062b49fba7a86e3a138956af04f481b7a7d481994aeebc2672e500f3f6d8c581268c2cfad4845158f79c2ef28f242f4fa8f6e573b8723a752d96169c9d885ada59cdeb6dbe932de86a019a7e8fc8aeb07748cfb272bd36d94fe83351252187c2e0bc58bb7a0a0af154b63397e6c68af4314601e29b07caed301b6831cf34caa579eb42a8c8bf69898d04b495174b5d7de0f20cf2b8fc55ed35c6ad157d3e7009f16d6b61786ee40583850e67af13e9d25be3', 16)\par
+c = int('0x3f984ff5244f1836ed69361f29905ca1ae6b3dcf249133c398d7762f5e277919174694293989144c9d25e940d2f66058b2289c75d1b8d0729f9a7c4564404a5fd4313675f85f31b47156068878e236c5635156b0fa21e24346c2041ae42423078577a1413f41375a4d49296ab17910ae214b45155c4570f95ca874ccae9fa80433a1ab453cbb28d780c2f1f4dc7071c93aff3924d76c5b4068a0371dff82531313f281a8acadaa2bd5078d3ddcefcb981f37ff9b8b14c7d9bf1accffe7857160982a2c7d9ee01d3e82265eec9c7401ecc7f02581fd0d912684f42d1b71df87a1ca51515aab4e58fab4da96e154ea6cdfb573a71d81b2ea4a080a1066e1bc3474', 16)\par
+d = owiener.attack(e, N)\par
+m = pow(c, d, N)\par
+print(long_to_bytes(m))\par
+\par
+\par
+\par
+\b\fs28 Output :-  crypto\{s0m3th1ng5_c4n_b3_t00_b1g\}\b0\fs22\par
+\par
+\par
+\b\fs32 34 Everthing is still big\par
+\b0\fs22\par
+\par
+#first we generate big prime number to create RSA public key and then we can encrypt the message  using public key\par
+# then we use Wiener\rquote s attack to attempt get private key and decrypt the message#\par
+\par
+!pip install pycryptodome\par
+!pip install git+https://github.com/maddivy/owiener.git\par
+from Crypto.Util.number import getPrime, bytes_to_long, long_to_bytes\par
+import owiener\par
+FLAG = b"crypto\{?????????????????????????\}"\par
+m = bytes_to_long(FLAG)\par
+def get_huge_RSA():\par
+    p = getPrime(1024)\par
+    q = getPrime(1024)\par
+    N = p * q\par
+    phi = (p - 1) * (q - 1)\par
+    while True:\par
+        d = getPrime(256)\par
+        e = pow(d, -1, phi)\par
+        if e.bit_length() == N.bit_length():\par
+            break\par
+    return N, e\par
+N, e = get_huge_RSA()\par
+c = pow(m, e, N)\par
+print(f'N = \{hex(N)\}')\par
+print(f'e = \{hex(e)\}')\par
+print(f'c = \{hex(c)\}')\par
+\par
+N = int('0xb8af3d3afb893a602de4afe2a29d7615075d1e570f8bad8ebbe9b5b9076594cf06b6e7b30905b6420e950043380ea746f0a14dae34469aa723e946e484a58bcd92d1039105871ffd63ffe64534b7d7f8d84b4a569723f7a833e6daf5e182d658655f739a4e37bd9f4a44aff6ca0255cda5313c3048f56eed5b21dc8d88bf5a8f8379eac83d8523e484fa6ae8dbcb239e65d3777829a6903d779cd2498b255fcf275e5f49471f35992435ee7cade98c8e82a8beb5ce1749349caa16759afc4e799edb12d299374d748a9e3c82e1cc983cdf9daec0a2739dadcc0982c1e7e492139cbff18c5d44529407edfd8e75743d2f51ce2b58573fea6fbd4fe25154b9964d', 16)\par
+e = int('0x9ab58dbc8049b574c361573955f08ea69f97ecf37400f9626d8f5ac55ca087165ce5e1f459ef6fa5f158cc8e75cb400a7473e89dd38922ead221b33bc33d6d716fb0e4e127b0fc18a197daf856a7062b49fba7a86e3a138956af04f481b7a7d481994aeebc2672e500f3f6d8c581268c2cfad4845158f79c2ef28f242f4fa8f6e573b8723a752d96169c9d885ada59cdeb6dbe932de86a019a7e8fc8aeb07748cfb272bd36d94fe83351252187c2e0bc58bb7a0a0af154b63397e6c68af4314601e29b07caed301b6831cf34caa579eb42a8c8bf69898d04b495174b5d7de0f20cf2b8fc55ed35c6ad157d3e7009f16d6b61786ee40583850e67af13e9d25be3', 16)\par
+c = int('0x3f984ff5244f1836ed69361f29905ca1ae6b3dcf249133c398d7762f5e277919174694293989144c9d25e940d2f66058b2289c75d1b8d0729f9a7c4564404a5fd4313675f85f31b47156068878e236c5635156b0fa21e24346c2041ae42423078577a1413f41375a4d49296ab17910ae214b45155c4570f95ca874ccae9fa80433a1ab453cbb28d780c2f1f4dc7071c93aff3924d76c5b4068a0371dff82531313f281a8acadaa2bd5078d3ddcefcb981f37ff9b8b14c7d9bf1accffe7857160982a2c7d9ee01d3e82265eec9c7401ecc7f02581fd0d912684f42d1b71df87a1ca51515aab4e58fab4da96e154ea6cdfb573a71d81b2ea4a080a1066e1bc3474', 16)\par
+d = owiener.attack(e, N)\par
+m = pow(c, d, N)\par
+print(long_to_bytes(m))\par
+\par
+\par
+\b\fs28 Output :-  crypto\{bon3h5_4tt4ck_i5_sr0ng3r_th4n_w13n3r5\}\b0\fs22\par
+\par
+\par
+\b\fs32 35 factoring\par
+\b0\fs22\par
+from math import sqrt\par
+def PrimeFactor(n):\par
+    m = n\par
+    while n%2==0:\par
+        n = n//2\par
+    if n == 1:\par
+        return 2\par
+    i = 3\par
+    sqrt = int(m**(0.5))\par
+    last = 0\par
+    while i <= sqrt :\par
+        while n%i == 0:\par
+            n = n//i\par
+            last = i\par
+        i+=2\par
+    if n> last:\par
+        return n\par
+    else:\par
+        return last\par
+\par
+num = 510143758735509025530880200653196460532653147\par
+\par
+print(PrimeFactor(num))\par
+\par
+\par
+\b\fs28 Output :-  \b0\fs22\par
+\par
+\par
+\b\fs32 36 fast primes\par
+\b0\fs22\par
+\par
+#In this we use RSA key from key.pem \par
+#then we decrypt the hexa decimal ciphertext using ciphertext.\par
+# then we can decrypt it using command m = cipher.decrypt(c)   #\par
+\par
+!pip install pycryptodome\par
+\par
+\par
+from Crypto.PublicKey import RSA\par
+from Crypto.Cipher import PKCS1_OAEP\par
+from Crypto.Util.number import long_to_bytes\par
+from Crypto.Util import number\par
+key = RSA.importKey(open("key.pem", "rb").read())\par
+print("n= ",key.n)\par
+print("e= ",key.e)\par
+e=  65537\par
+n = 4013610727845242593703438523892210066915884608065890652809524328518978287424865087812690502446831525755541263621651398962044653615723751218715649008058509\par
+p = 51894141255108267693828471848483688186015845988173648228318286999011443419469\par
+q = 77342270837753916396402614215980760127245056504361515489809293852222206596161\par
+phi = (p-1)*(q-1)\par
+d = pow(e,-1,phi)\par
+key = RSA.construct((n, e, d))\par
+cipher = PKCS1_OAEP.new(key)\par
+hexc = 0x249d72cd1d287b1a15a3881f2bff5788bc4bf62c789f2df44d88aae805b54c9a94b8944c0ba798f70062b66160fee312b98879f1dd5d17b33095feb3c5830d28\par
+c = long_to_bytes(hexc)\par
+m = cipher.decrypt(c)\par
+print(m)\par
+\par
+\par
+\b\fs28 Output :-  b'crypto\{p00R_3570n14\}'\b0\fs22\par
+\par
+\par
+\b\fs32 37 Generators of Groups\par
+\b0\fs22\par
+#in this if no smaller power of k mod p =k then k = genarator\par
+# here we used a function generator which loop iterates through possible values of k\par
+# then we find the first generator of p so we can get value of k #\par
+\par
+\par
+def is_generator(k, p):\par
+  for n in range(2, p):\par
+    if pow(k, n, p) == k:\par
+      return False\par
+  return True\par
+p = 28151\par
+for k in range(p):\par
+  if is_generator(k, p):\par
+    print(k)\par
+    break\par
+\par
+\par
+\b\fs28 Output :-  7\b0\fs22\par
+\par
+\par
+\b\fs32 38 Inferius Prime\par
+\b0\fs22\par
+#we are private key using modular inverse of the public exponent\par
+# then decrypts the cipher text by raising the power of d modulo n\par
+# then it converts decrpted  number back to string form to get flag #\par
+# \par
+\par
+from Crypto.Util.number import inverse, long_to_bytes\par
+p = 752708788837165590355094155871\par
+q = 986369682585281993933185289261\par
+n = p * q\par
+phi = (p - 1) * (q - 1)\par
+e = 3\par
+ct = 39207274348578481322317340648475596807303160111338236677373\par
+d = inverse(e, phi)\par
+pt = pow(ct, d, n)  \par
+decrypted = long_to_bytes(pt)  \par
+print(decrypted.decode())\par
+\par
+\par
+\b\fs28 Output :-  crypto\{N33d_b1g_pR1m35\}\b0\fs22\par
+\par
+\par
+\b\fs32 39 many prime\par
+\b0\fs22\par
+\par
+#we first dycrypts an encrypted flag by calculating  a shared secret using elliptic curve cryptography \par
+# then decrypts the flag using AES in CBC mode to check padding with PKCS7 and remove padding when converting to plaintext#\par
+def is_pkcs7_padded(message):\par
+    padding = message[-message[-1]:]\par
+    return all(padding[i] == len(padding) for i in range(0, len(padding)))\par
+def decrypt_flag(shared_secret: int, iv: str, ciphertext: str):\par
+      sha1 = hashlib.sha1()\par
+    sha1.update(str(shared_secret).encode('ascii'))\par
+    key = sha1.digest()[:16]\par
+    ciphertext = bytes.fromhex(ciphertext)\par
+    iv = bytes.fromhex(iv)\par
+    cipher = AES.new(key, AES.MODE_CBC, iv)\par
+    plaintext = cipher.decrypt(ciphertext)\par
+    if is_pkcs7_padded(plaintext):\par
+        return unpad(plaintext, 16).decode('ascii')\par
+    else:\par
+        return plaintext.decode('ascii')\par
+\par
+p = 310717010502520989590157367261876774703\par
+F = GF(p)\par
+E = EllipticCurve(F, [2, 3])\par
+\par
+g_x = 179210853392303317793440285562762725654\par
+g_y = 105268671499942631758568591033409611165\par
+G = E(g_x, g_y)\par
+\par
+b_x = 272640099140026426377756188075937988094\par
+b_y = 51062462309521034358726608268084433317\par
+B = E(b_x, b_y)\par
+\par
+public = E(280810182131414898730378982766101210916, 291506490768054478159835604632710368904)\par
+\par
+iv = '07e2628b590095a5e332d397b8a59aa7'\par
+encrypted_flag = '8220b7c47b36777a737f5ef9caa2814cf20c1c1ef496ec21a9b4833da24a008d0870d3ac3a6ad80065c138a2ed6136af'\par
+n = discrete_log(public, G, operation='+')\par
+shared_secret = (B * n)[0]\par
+print(decrypt_flag(shared_secret, iv, encrypted_flag))\par
+\par
+\par
+\par
+\b\fs28 Output :-  \b0\fs22\par
+\par
+\par
+\b\fs32 40 Marin's Secrets\par
+\b0\fs22\par
+\par
+\par
+# from Crypto.Util.number import *\par
+# from gmpy2 import *\par
+<ipython-input-79-ded6840d61c6> in <cell line: 24>()\par
+     22 p = 310717010502520989590157367261876774703\par
+     23 F = GF(p)\par
+---> 24 E = EllipticCurve(F, [2, 3])\par
+     25 \par
+     26 g_x = 179210853392303317793440285562762725654\par
+\par
+\par
+\par
+\b\fs28 Output :-  crypto\{Th3se_Pr1m3s_4r3_t00_r4r3\}\b0\fs22\par
+\par
+\par
+\b\fs32 41 No way back home\par
+\b0\fs22\par
+#we are generating RSA value using AES encryption key then decrypts the ciphertext using ECB mode\par
+#we can calculate rsa value by v = (va x vb x vab^-1)  mod n#\par
+\par
+from Crypto.Cipher import AES\par
+from hashlib import sha256\par
+from Crypto.Util.number import long_to_bytes\par
+\par
+p, q = (10699940648196411028170713430726559470427113689721202803392638457920771439452897032229838317321639599506283870585924807089941510579727013041135771337631951, 11956676387836512151480744979869173960415735990945471431153245263360714040288733895951317727355037104240049869019766679351362643879028085294045007143623763) \par
+n = p*q\par
+va = 124641741967121300068241280971408306625050636261192655845274494695382484894973990899018981438824398885984003880665335336872849819983045790478166909381968949910717906136475842568208640203811766079825364974168541198988879036997489130022151352858776555178444457677074095521488219905950926757695656018450299948207 \par
+vab = 114778245184091677576134046724609868204771151111446457870524843414356897479473739627212552495413311985409829523700919603502616667323311977056345059189257932050632105761365449853358722065048852091755612586569454771946427631498462394616623706064561443106503673008210435922340001958432623802886222040403262923652 \par
+vb = 6568897840127713147382345832798645667110237168011335640630440006583923102503659273104899584827637961921428677335180620421654712000512310008036693022785945317428066257236409339677041133038317088022368203160674699948914222030034711433252914821805540365972835274052062305301998463475108156010447054013166491083 \par
+c = 'fef29e5ff72f28160027959474fc462e2a9e0b2d84b1508f7bd0e270bc98fac942e1402aa12db6e6a36fb380e7b53323' \par
+v = (va * vb * pow(vab, -1, q)) % n\par
+key = sha256(long_to_bytes(v)).digest()\par
+print(AES.new(key, AES.MODE_ECB).decrypt(bytes.fromhex(c)))\par
+\par
+\par
+\b\fs28 Output :-  crypto\{1nv3rt1bl3_k3y_3xch4ng3_pr0t0c0l\}\b0\fs22\par
+\par
+\par
+\b\fs32 42 Parameter Injection\par
+\b0\fs22\par
+#in this first we connect to server and send specific value of p,g A  to maupalate key exchange\par
+# then it decrypts the flag using AES in CBC mode\par
+# then we exploit the weakness of the server to get flag #\par
+\par
+\par
+# import pwn\par
+import json\par
+import hashlib\par
+# from Crypto.Cipher import AES\par
+\par
+host = "socket.cryptohack.org"\par
+port = 13371\par
+"""{{\field{\*\fldinst{HYPERLINK https://cryptopals.com/sets/5/challenges/34 }}{\fldrslt{https://cryptopals.com/sets/5/challenges/34\ul0\cf0}}}}\f0\fs22\par
+Normal traffic:\par
+A->B\par
+Send "p", "g", "A"\par
+B->A\par
+Send "B"\par
+A->B\par
+Send AES-CBC(SHA1(s)[0:16], iv=random(16), msg) + iv\par
+B->A\par
+Send AES-CBC(SHA1(s)[0:16], iv=random(16), A's msg) + iv\par
+Injected traffic:\par
+A->M\par
+Send "p", "g", "A"\par
+M->B\par
+Send "p", "g", "p"\par
+B->M\par
+Send "B"\par
+M->A\par
+Send "p"\par
+A->M\par
+Send AES-CBC(SHA1(s)[0:16], iv=random(16), msg) + iv\par
+M->B\par
+Relay that to B\par
+B->M\par
+Send AES-CBC(SHA1(s)[0:16], iv=random(16), A's msg) + iv\par
+M->A\par
+Relay that to A\par
+Result\par
+A: A = pow(g, a, p)\par
+B: B = pow(g, p, p)\par
+A: k = pow(p, a, p)\par
+B: k = pow(p, b, p)\par
+So k = 0"""\par
+\par
+def exploit():\par
+    # pr = pwn.connect(host, port)\par
+    try:\par
+        pr.readuntil(": ")\par
+        line = json.loads(pr.readline().strip().decode())\par
+        #p = int(line['p'][2:].strip('f'), 16)\par
+        p = int(line['p'], 16)\par
+        g = int(line['g'], 16)\par
+        A = int(line['A'], 16)\par
+\par
+        payload = json.dumps(\{"p":hex(p),"g":hex(g),"A":hex(p)\})\par
+        print(payload, len(payload))\par
+        pr.sendlineafter(": ", payload)\par
+        pr.readuntil(": ")\par
+        line = json.loads(pr.readline().strip().decode())\par
+        B = int(line['B'], 16)\par
+        payload = json.dumps(\{"B":hex(p)\})\par
+        print(payload, len(payload))\par
+        pr.sendlineafter(": ", payload)\par
+        pr.readuntil(": ")\par
+        line = json.loads(pr.readline().strip().decode())\par
+        print(line)\par
+        iv = bytes.fromhex(line['iv'])\par
+        encrypted_flag = bytes.fromhex(line['encrypted_flag'])\par
+        sha1 = hashlib.sha1()\par
+        secret = 0\par
+        sha1.update(str(secret).encode())\par
+        key = sha1.digest()[:16]\par
+        aes = AES.new(key, AES.MODE_CBC, iv)\par
+        print(aes.decrypt(encrypted_flag))\par
+    finally:\par
+        pr.close()\par
+\par
+exploit()\par
+\par
+\par
+\b\fs28 Output :-  b"crypto\{3ucl1d_w0uld_b3_pr0ud\}\b0\fs22\par
+\par
+\par
+\b\fs32 43 Ron was Wrong, Whit is Right\par
+\b0\fs22\par
+\par
+\par
+key = RSA.importKey(open("21.pem", "rb").read())\par
+e = key.e\par
+n = key.n\par
+p = 919031168254299342928662994540730760042229248845820491699169870943314884504551963184014786520812939038906152950817942941469675496074887272906954399256046690838233813273902630076899906873722574023918253104149453601408405078374008695616160025877687382663027910687942091698042309812910101246025081363544171351624307177908410700904833438480012985928358897861427063761678614898919524867442676631453135379994570031284289815099294504127712924001149921480778993635917803466637717023744788311275545126346774536416864472035644211758788016642401235014385037912224180351022196262011724157012443048941426178651665266181311662824205620324073087330858064769424755443807165558567191049013947419763315902476674266627953223373671797370373786249718677582213173537848582863398367624397247597103174897140005790273296171101569756006898658668311846034013183862374297777882433967015111727139360441681664840944403450472574336901043555319067050153928231938431298082827397506406624964952344826628463723499263165279281720105570577138817805451223334196017505528543229067732013216932022575286870744622250293712218581458417969597311485156075637589299870500738770767213366940656708757081771498126771190548298648709527029056697749965377697006723247968508680596118923\par
+q = 991430390905926023965735525726256769345153760248048478891327804533279477721590201738061124861790305326884541900044434890157058142414306020739922709698601329762087825767461256626800629782378634339618941488765491437487541851308806651586976069659042714378353883168031522106709494592827914376213512564492771821921367377484213072867988877925314809325159382342584541006645302760204539354879391605736604946702073863673524002591877977949645618863730441482821840664748508050205004505250025193611888170440612737112479006348533153568103452396596042639466753099280111709882461562564978070397786887446291916733276692400981917025361391646188802038772976331121474570242334921390569285834250256522656433623912544555266998750630136756355560927237594975904642791712318215315246754105993145827690531584325461597482035600919501967088106457091199733024323755210212616553447076697617349235377466327471959683763796707566328536834402308887105044128592177681553611608618850780128709949316259039664054913946726480968288231015999572777436469163437066403964134928735809253108394078092917006632332098357725950865697047565284013456253933234017983509582245874130968218422573483012858388392588302838940565560162598810462310034964473576147200222580784694005333482381\par
+c = 0xc62d91677825632cb8ac9d2fbee7490fca70b3f067bd8d811fa446a21001de7943cacafc429b2513d3f20c3224d212ca2937a4a4ea10792a1c498b791e978e4b050b525576bc68421e40d9f420c0b8a07778daf69edf2095bf48222896bb2d6581288ce7a2e7aec15a88a440ff1a1e48beb56f68b4f860d1f64a6ec8cafed90846b7d893bc482df69c8478d5a0d6fc2d043cdd97178740a9eb59d2576b5136200c8ea77e648c88e6c5104ca5d0c6add2fc2c8569ce909f8461e7fa3d901fe67eaeff656399d4751fedba9973e246427e0c7a217f5bdc3edcb5033f17b5ef53419e340355a809eb46f48f538e880abd6f72212b02d3dbf2c4f633a503e648d1a835c4574b23e329e1c51078ea7cbb7533e771899498d4a5760bc0799b7e046f268f098fe0b57de47cd70ccf01ad3c9daec5027f306141bfe7a6c0bd29ee6caf94c7433c25e34ee974005e2360337cb6b3cec5eaf5d31d19f01435f4cdcaa455a18e78dee078395b8ad14b9c3a0d817dc1e3109c7b8af35ab3a5950bf47d5e621f9373ef421540052aac307ecea91f9c29c14bfd81b41d4c5a9b34a8ec2fa1ae06c3d881f39286c3d8dbb1849602fecc27bb135f7dd443e2598d247d1182d350b04be1ac0a734cb0e852a36902d88066ac375a35e279b126e413a97aaa35a0ba933f7b8d574c298332ce428c181464b240709a414af1b77103441b6ccfd0790eccea5926844054903c83f4cb415d600a6b7bc771c9e7a86394a2b427ebe8edec08b8095f561827716898e11caf6f0fe562af8a69f7b6469f0e86bdcc32f429f10821c763b34307efc5b2ae7fd524a07e5d0b762c096f025a3f240fb7bd3554582dcce32c175867d93970b0422e17870ec58f2a305545a3d284b3abb2d21a45ad8fd5faed0dc66312a5aa2f994606a51cd6682acd48ea3fb883f0611e1e5c2fb4047b5c80815ba5d3bcfefaf121bfde4d5c91ee27bb899ef0d29fa5c6dc4223ac2bfcff0217d08579a13e9b02dc97aa2622df62eeaaa38bb3bd087cdd209f03e8926a951e90eaa0f678a252a067ac66402a4c85865931689ed3b33f9f6de0c499f140ef508dfba6007a607a271dcbec18a61f7488bba34d143f93bc259310ffbf23f3391734d8d8811a4be8abf6382e55c2ccbfd80b1559d907fd8d46e0431cdbcd8fdb06d57973437f7b8ff5efc5a53c80d552e8fe622971f7376eeea35f4df9b32ada93e531a52b63ba13f6b7bf61ab337d6d93feb0e8c8a309dfa7e5f50e8cf9655b73ae64822b50db5312f35f4718b0668305065ea283ddf8f0a4e8f486ee9d119ebc584be1837b3d959a25ace208ffac2fb703390a72d3027b64fdd1955b513c0403f09232efa1794a277e0be3f4f9f3a6fd23c6e52101e723cef5db7a2a18a107cd522379adb40c5ed36b26cdf53a1000d7d576f1157b42aac3d3ee011275\par
+d = pow(e, -1, (p-1)*(q-1))\par
+key = RSA.construct((n, e, d))\par
+cipher = PKCS1_OAEP.new(key)\par
+print(cipher.decrypt(bytes.fromhex(hex(c)[2:])).decode())\par
+\par
+\par
+\b\fs28 Output :-  \b0\fs22\par
+\par
+\par
+\b\fs32 44 Square Eyes\par
+\b0\fs22\par
+from Crypto.Util.number import *\par
+\par
+n = 535860808044009550029177135708168016201451343147313565371014459027743491739422885443084705720731409713775527993719682583669164873806842043288439828071789970694759080842162253955259590552283047728782812946845160334801782088068154453021936721710269050985805054692096738777321796153384024897615594493453068138341203673749514094546000253631902991617197847584519694152122765406982133526594928685232381934742152195861380221224370858128736975959176861651044370378539093990198336298572944512738570839396588590096813217791191895941380464803377602779240663133834952329316862399581950590588006371221334128215409197603236942597674756728212232134056562716399155080108881105952768189193728827484667349378091100068224404684701674782399200373192433062767622841264055426035349769018117299620554803902490432339600566432246795818167460916180647394169157647245603555692735630862148715428791242764799469896924753470539857080767170052783918273180304835318388177089674231640910337743789750979216202573226794240332797892868276309400253925932223895530714169648116569013581643192341931800785254715083294526325980247219218364118877864892068185905587410977152737936310734712276956663192182487672474651103240004173381041237906849437490609652395748868434296753449\par
+e = 65537\par
+ct = 222502885974182429500948389840563415291534726891354573907329512556439632810921927905220486727807436668035929302442754225952786602492250448020341217733646472982286222338860566076161977786095675944552232391481278782019346283900959677167026636830252067048759720251671811058647569724495547940966885025629807079171218371644528053562232396674283745310132242492367274184667845174514466834132589971388067076980563188513333661165819462428837210575342101036356974189393390097403614434491507672459254969638032776897417674577487775755539964915035731988499983726435005007850876000232292458554577437739427313453671492956668188219600633325930981748162455965093222648173134777571527681591366164711307355510889316052064146089646772869610726671696699221157985834325663661400034831442431209123478778078255846830522226390964119818784903330200488705212765569163495571851459355520398928214206285080883954881888668509262455490889283862560453598662919522224935145694435885396500780651530829377030371611921181207362217397805303962112100190783763061909945889717878397740711340114311597934724670601992737526668932871436226135393872881664511222789565256059138002651403875484920711316522536260604255269532161594824301047729082877262812899724246757871448545439896\par
+p = 23148667521998097720857168827790771337662483716348435477360567409355026169165934446949809664595523770853897203103759106983985113264049057416908191166720008503275951625738975666019029172377653170602440373579593292576530667773951407647222757756437867216095193174201323278896027294517792607881861855264600525772460745259440301156930943255240915685718552334192230264780355799179037816026330705422484000086542362084006958158550346395941862383925942033730030004606360308379776255436206440529441711859246811586652746028418496020145441513037535475380962562108920699929022900677901988508936509354385660735694568216631382653107\par
+phi = p*(p-1)\par
+d = inverse(e,phi)\par
+m = pow(ct,d,n)\par
+print(long_to_bytes(m))\par
+\par
+\par
+\b\fs28 Output :-  crypto\{squar3_r00t_i5_f4st3r_th4n_f4ct0r1ng!\}\b0\fs22\par
+\par
+\par
+\b\fs32 45 Static Client\par
+\b0\fs22\par
+#in this code we connect to the server and try to dcrypt it using a shared secrect key  generated by Diffie-Hellman-like key exchange. \par
+# it uses AES decryption in CBC mode to check whether padding is correct before returning to decrypted flag\par
+def is_pkcs7_padded(message):\par
+    padding = message[-message[-1]:]\par
+    return all(padding[i] == len(padding) for i in range(len(padding)))\par
+def recvline(sock):\par
+    data = b""\par
+    while not data.endswith(b'\\n'):\par
+        chunk = sock.recv(1)\par
+        if not chunk:\par
+            raise ConnectionError("Connection closed by the server")\par
+        data += chunk\par
+    return data\par
+def receive_until(sock, delimiter):\par
+    data = b""\par
+    while delimiter not in data:\par
+        chunk = sock.recv(1)\par
+        if not chunk:\par
+            raise ConnectionError("Connection closed by the server")\par
+        data += chunk\par
+    return data\par
+host = "socket.cryptohack.org"\par
+port = 13373\par
+con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\par
+con.connect((host, port))\par
+receive_until(con, b'Intercepted from Alice: ')\par
+alice = json.loads(recvline(con).decode())\par
+p_hex, g_hex, A_hex = alice['p'], alice['g'], alice['A']\par
+receive_until(con, b'Intercepted from Bob: ')\par
+B_hex = json.loads(recvline(con).decode())['B']\par
+receive_until(con, b'Intercepted from Alice: ')\par
+content = json.loads(recvline(con).decode())\par
+iv_hex, enc_flag_hex = content['iv'], content['encrypted']\par
+to_bob = \{"p": p_hex, "g": A_hex, "A": "0x1"\}\par
+con.send((json.dumps(to_bob) + "\\n").encode())\par
+receive_until(con, b'Bob says to you: ')\par
+shared_secret = int(json.loads(recvline(con).decode())['B'], 16)\par
+def decrypt_flag(shared_secret: int, iv: str, ciphertext: str):\par
+       sha1 = hashlib.sha1()\par
+    sha1.update(str(shared_secret).encode('ascii'))\par
+    key = sha1.digest()[:16]\par
+   ciphertext = bytes.fromhex(ciphertext)\par
+    iv = bytes.fromhex(iv)\par
+    cipher = AES.new(key, AES.MODE_CBC, iv)\par
+    plaintext = cipher.decrypt(ciphertext)\par
+    if is_pkcs7_padded(plaintext):\par
+        return unpad(plaintext, 16).decode('ascii')\par
+    else:\par
+        return plaintext.decode('ascii')\par
+print(decrypt_flag(shared_secret, iv_hex, enc_flag_hex))\par
+con.close()\par
+\par
+\par
+\b\fs28 Output :-  crypto\{n07_3ph3m3r4l_3n0u6h\}\b0\fs22\par
+\par
+\par
+\b\fs32 46 unencryptable\par
+\b0\fs22\par
+#we are decrypting  RSA-encrypted message by finding 2 prime number used in encryption\par
+# and when we find the prime numbers we use them to find decryption key\par
+# then we can reverse the encryption using the key#\par
+!pip install gmpy2\par
+\par
+from Crypto.Util.number import *\par
+import gmpy2  \par
+\par
+n = 0x7fe8cafec59886e9318830f33747cafd200588406e7c42741859e15994ab62410438991ab5d9fc94f386219e3c27d6ffc73754f791e7b2c565611f8fe5054dd132b8c4f3eadcf1180cd8f2a3cc756b06996f2d5b67c390adcba9d444697b13d12b2badfc3c7d5459df16a047ca25f4d18570cd6fa727aed46394576cfdb56b41\par
+e = 0x10001\par
+c = 0x5233da71cc1dc1c5f21039f51eb51c80657e1af217d563aa25a8104a4e84a42379040ecdfdd5afa191156ccb40b6f188f4ad96c58922428c4c0bc17fd5384456853e139afde40c3f95988879629297f48d0efa6b335716a4c24bfee36f714d34a4e810a9689e93a0af8502528844ae578100b0188a2790518c695c095c9d677b\par
+\par
+DATA = bytes.fromhex("372f0e88f6f7189da7c06ed49e87e0664b988ecbee583586dfd1c6af99bf20345ae7442012c6807b3493d8936f5b48e553f614754deb3da6230fa1e16a8d5953a94c886699fc2bf409556264d5dced76a1780a90fd22f3701fdbcb183ddab4046affdc4dc6379090f79f4cd50673b24d0b08458cdbe509d60a4ad88a7b4e2921")\par
+b = bytes_to_long(DATA)\par
+assert (pow(b, e, n) == b)  \par
+r = e - 1\par
+def factor(_b, _r, _n):\par
+    for i in range(2, 1000):\par
+        if _r % i == 0:\par
+            t = pow(_b, _r // i, _n)\par
+            if gmpy2.gcd(t - 1, _n) != 1 and gmpy2.gcd(t - 1, _n) != _n:\par
+                print("found p and q")\par
+                p = gmpy2.gcd(t - 1, _n)\par
+                q = _n // gmpy2.gcd(t - 1, _n)\par
+                break\par
+    return p, q\par
+p, q = factor(b, e - 1, n)\par
+tot = (p - 1) * (q - 1)\par
+d = inverse(e, tot)\par
+flag = long_to_bytes(pow(c, d, n)).decode()\par
+print(flag)\par
+\par
+\b\fs28 Output :-crypto\{R3m3mb3r!_F1x3d_P0iNts_aR3_s3crE7s_t00\} \par
+\par
+\b0\fs22\par
+}
+ 
